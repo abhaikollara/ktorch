@@ -89,10 +89,6 @@ class Tensor(object):
 		from.magic_ops import absolute
 		return absolute(self)
 
-	def __len__(self):
-		from.magic_ops import length
-		return length(self)
-
 	def __lt__(self, x):
 		from .magic_ops import lt
 		return lt(self, x)	

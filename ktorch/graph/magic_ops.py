@@ -85,15 +85,6 @@ class Absolute(Op):
 	def call(self, x):
 		return abs(x)
 
-class Length(Op):
-
-	def __init__(self):
-		self.num_inputs = 1
-		super(Length, self).__init__()
-
-	def call(self, x):
-		return len(x)
-
 class Negative(Op):
 
 	def __init__(self):
