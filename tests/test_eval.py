@@ -30,7 +30,8 @@ assert np.all(f([x, y]) == c.eval())
 # Advanced indexing
 
 a = Tensor()
-b = a[len(a)]
+i = Variable(1)
+b = a[:i, i:]
 f = Function(a, b)
 
-assert f(x)[0].shape == (1, 3, 4)
+assert f(x)[0].shape == (1, 2, 4)
