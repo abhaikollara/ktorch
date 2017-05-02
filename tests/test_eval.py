@@ -26,3 +26,11 @@ d = a + b * 0.3
 f = Function([a, b], d)
 
 assert np.all(f([x, y]) == c.eval())
+
+# Advanced indexing
+
+a = Tensor()
+b = a[len(a)]
+f = Function(a, b)
+
+assert f(x)[0].shape == (1, 3, 4)
