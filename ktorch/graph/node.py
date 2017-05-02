@@ -22,4 +22,6 @@ class Node(object):
 		self.evaluated_inputs[idx] = True
 		if all(self.evaluated_inputs):
 			for output in self.outputs:
+				if hasattr(output, 'value'):
+					del output.value
 				output.eval()
