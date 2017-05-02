@@ -1,17 +1,21 @@
 class Tensor(object):
 
+	def __init__(self):
+		self.nodes = []
+
 	def eval(self):
 		if not hasattr(self, 'value'):
 			if not hasattr(self, 'op') or self.op is None:
 			    raise Exception('Input tensor was not provided value.')
 			if type(self.inputs) is list:
-				self.value = self.op.call([evaluate(x) for x in self.inputs])
+				self.set_value(self.op.call([evaluate(x) for x in self.inputs]))
 			else:
-				self.value = self.op.call(self.inputs.eval())
+				self.set_value(self.op.call(self.inputs.eval()))
 		return self.value
 
 	def set_value(self, value):
 		self.value = value
+		[node.ping(self) for node in self.nodes]
 
 	def __add__(self, x):
 		from .magic_ops import add

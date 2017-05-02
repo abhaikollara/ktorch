@@ -31,7 +31,20 @@ assert np.all(f([x, y]) == c.eval())
 
 a = Tensor()
 i = Variable(1)
-b = a[:i, i:]
+b = a[:i, i + 1:]
 f = Function(a, b)
 
-assert f(x)[0].shape == (1, 2, 4)
+assert f(x)[0].shape == (1, 1, 4)
+
+
+# Greedy eval
+
+a = Tensor()
+b = Tensor()
+
+c = a + b
+
+a.set_value('Hello ')
+b.set_value('World!')
+
+assert c.value == 'Hello World!'

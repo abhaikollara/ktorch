@@ -1,5 +1,5 @@
-from tensor import Tensor
-
+from .tensor import Tensor
+from .node import Node
 class Op(object):
 
 	def __init__(self):
@@ -25,6 +25,7 @@ class Op(object):
 		if type(x) is tuple:
 			x = list(x)
 		y.inputs = x
+		Node(x, y)
 		return y
 
 	def _check_num_inputs(self, n):
