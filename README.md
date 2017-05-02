@@ -70,9 +70,10 @@ b = Tensor()
 c = Tensor()
 d = a + b * c
 print d.value
-'''Obviously, because we haven't set values for a, b and c
+'''
 AttributeError: 'Tensor' object has no attribute 'value'
 '''
+#Obviously, because we haven't set values for a, b and c
 a.set_value(5)
 b.set_value(3)
 c.set_value(2)
