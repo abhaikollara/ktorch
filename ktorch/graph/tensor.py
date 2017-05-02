@@ -1,15 +1,14 @@
 class Tensor(object):
 
 	def eval(self):
-		if not hasattr(self, 'op') or self.op is None:
-			if hasattr(self, 'value'):
-				return self.value
+		if not hasattr(self, 'value'):
+			if not hasattr(self, 'op') or self.op is None:
+			    raise Exception('Input tensor was not provided value.')
+			if type(self.inputs) is list:
+				self.value = self.op.call([evaluate(x) for x in self.inputs])
 			else:
-				raise Exception('Input tensor was not provided value.')
-		if type(self.inputs) is list:
-			return self.op.call([evaluate(x) for x in self.inputs])
-		else:
-			return self.op.call(self.inputs.eval())
+				self.value = self.op.call(self.inputs.eval())
+		return self.value
 
 	def set_value(self, value):
 		self.value = value
