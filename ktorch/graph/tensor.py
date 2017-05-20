@@ -1,7 +1,30 @@
+
+tensors = {}
+
 class Tensor(object):
 
-	def __init__(self):
+	def __init__(self, shape=None, ndim=None, dtype=None, name=None):
 		self.nodes = []
+		global tensors
+		if name is None:
+			name = self.__class__.__name__
+			idx = 0
+			while name + '_' + str(idx) in tensors:
+				idx += 1
+			self.name = name + '_' + str(idx)
+			tensors[self.name] = self
+		else:
+			if name in tensors:
+				raise Exception('Another tensor with name \'' + name + '\' already exists.')
+			self.name = name
+			tensors[name] = self
+		if shape is not None:
+			self.shape = shape
+		elif ndim is not None:
+			self.shape = (None,) * ndim
+		else:
+			self.shape = None
+		self.dtype = dtype
 
 	def eval(self):
 		if not hasattr(self, 'value'):
