@@ -77,10 +77,21 @@ class Op(object):
             output_shape = self._compute_elemwise_op_output_shape(output_shape, input_shape)
         return output_shape
 
+    def _get_dtype(self, value):
+        dtype = getattr(value, 'dtype', type(value))
+        if dtype is not None and type(dtype) is not str:
+            if hasattr(dtype, 'name'):
+                dtype = dtype.name
+            elif hasattr(dtype, '__name__'):
+                dtype = dtype.__name__
+            else:
+                dtype = str(dtype)
+        return dtype
+
     def compute_output_dtype(self, inputs):
         if type(inputs) is not list:
             return inputs.dtype
-        input_dtypes = [str(getattr(input, 'dtype', type(input))) for input in inputs]
+        input_dtypes = [self._get_dtype(input) for input in inputs]
         if not input_dtypes:
             return None
         def _get_big_dtype(dtype1, dtype2):

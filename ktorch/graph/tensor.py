@@ -31,14 +31,39 @@ class Tensor(object):
 			if not hasattr(self, 'op') or self.op is None:
 			    raise Exception('Input tensor was not provided value.')
 			if type(self.inputs) is list:
-				self.set_value(self.op.call([evaluate(x) for x in self.inputs]))
+				inputs = [evaluate(x) for x in self.inputs]
 			else:
-				self.set_value(self.op.call(self.inputs.eval()))
+				inputs = self.inputs.eval()
+			self.set_value(self.op.call(inputs))
+			self.shape = self.op.compute_output_shape(inputs)
+			self.dtype = self.op.compute_output_dtype(inputs)
 		return self.value
 
 	def set_value(self, value):
 		self.value = value
+		self.dtype = self._get_dtype(value)
+		self.shape = self._get_shape(value)
 		[node.ping(self) for node in self.nodes]
+
+	def _get_shape(self, value):
+		if hasattr(value, 'shape'):
+			shape = value.shape
+		elif hasattr(value, 'size'):
+			shape = tuple(value.size())
+		else:
+			shape = None
+		return shape
+
+	def _get_dtype(self, value):
+		dtype = getattr(value, 'dtype', type(value))
+		if dtype is not None and type(dtype) is not str:
+			if hasattr(dtype, 'name'):
+				dtype = dtype.name
+			elif hasattr(dtype, '__name__'):
+				dtype = dtype.__name__
+			else:
+				dtype = str(dtype)
+		return dtype
 
 	def __add__(self, x):
 		from .magic_ops import add

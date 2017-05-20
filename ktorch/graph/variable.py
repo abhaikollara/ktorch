@@ -1,5 +1,11 @@
 from tensor import Tensor
 
+def _is_num(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
 
 
 _FLOATX = 'float32'
@@ -10,15 +16,8 @@ def floatx():
 class Variable(Tensor):
 
 	def __init__(self, value, **kwargs):
-		self.value = value
-		shape = getattr(value, 'shape')
-		dtype = getattr(value, 'dtype', type(value))
-		if dtype is not None and type(dtype) is not str:
-			if hasattr(dtype, 'name'):
-				dtype = dtype.name
-			else:
-				dtype = str(dtype)
-		super(Variable, self).__init__(shape=shape, dtype=dtype, **kwargs)
+		super(Variable, self).__init__(**kwargs)
+		self.set_value(value)
 
 	def eval(self):
 		return self.value
