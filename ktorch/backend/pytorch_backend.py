@@ -154,5 +154,5 @@ def dot(x, y):
     return get_op(_dot)([x, y])
 
 
-def batch_sot(x, y, axis=None):
+def batch_dot(x, y, axis=None):
     pass
