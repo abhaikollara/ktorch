@@ -32,10 +32,8 @@ def placeholder(shape=None, ndim=None, dtype=None, sparse=False, name=None):
         raise Exception('Sparse tensors are not supported yet :( ')
     if dtype is None:
         dtype = keras.backend.floatx()
-    ktorch_tensor = Tensor(name=name)
-    ktorch_tensor.ndim = ndim
-    ktorch_tensor.ndim = ndim
-    ktorch_tensor.dtype = dtype
+    ktorch_tensor = Tensor(name=name, shape=shape, ndim=ndim, dtype=dtype)
+    return ktorch_tensor
 
 
 def shape(x):
@@ -207,9 +205,3 @@ def batch_dot(x, y, axes=None):
             if axes[1] == 2:
                 x = torch.transpose(x, 1, 2)
             # -------TODO--------------#
-
-
-
-
-
-
