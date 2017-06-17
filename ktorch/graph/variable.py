@@ -1,4 +1,4 @@
-from tensor import Tensor
+from .tensor import Tensor
 
 def _is_num(x):
     try:

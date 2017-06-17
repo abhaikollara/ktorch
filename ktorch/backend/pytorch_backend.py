@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import keras
-from .graph import *
+from ..graph import *
 
 
 
