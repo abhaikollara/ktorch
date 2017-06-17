@@ -164,3 +164,4 @@ def get_op(func, output_shape=None, output_dtype=None, num_inputs=None):
         op.compute_output_dtype = output_dtype
     op.num_inputs = num_inputs
     op.call = func
+    return op
