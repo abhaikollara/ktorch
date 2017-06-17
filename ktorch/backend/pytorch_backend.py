@@ -92,7 +92,7 @@ def ones_like(x, dtype=None, name=None):
     return y
 
 
-def ones_like(x, dtype=None, name=None):
+def zeros_like(x, dtype=None, name=None):
     y = get_op(lambda x: x * 0.)(x)
     return y
 
