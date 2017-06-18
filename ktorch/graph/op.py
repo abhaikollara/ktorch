@@ -12,8 +12,18 @@ def _is_num(x):
     try:
         float(x)
         return True
-    except ValueError:
+    except:
         return False
+
+
+def _get_shape(x):
+    if hasattr(x, 'shape'):
+        return x.shape
+    if hasattr(x, 'value'):
+        return x.value.size()
+    if _is_num(x):
+        return ()
+    return None
 
 class Op(object):
 
@@ -61,17 +71,10 @@ class Op(object):
 
     def compute_output_shape(self, inputs):
         if type(inputs) is not list:
-            return inputs.shape
-        input_shapes = []
-        for input in inputs:
-            if hasattr(input, 'shape'):
-                input_shapes.append(input.shape)
-            elif _is_num(input):
-                input_shapes.append(tuple())
-            else:
-                input_shapes.append(None)
-        if not input_shapes:
-            return input_shapes
+            return _get_shape(inputs)
+        if len(inputs) == 0:
+            return None
+        input_shapes = list(map(_get_shape, inputs))
         output_shape = input_shapes[0]
         for input_shape in input_shapes[1:]:
             output_shape = self._compute_elemwise_op_output_shape(output_shape, input_shape)
@@ -90,10 +93,11 @@ class Op(object):
 
     def compute_output_dtype(self, inputs):
         if type(inputs) is not list:
-            return inputs.dtype
+            return self._get_dtype(inputs)
         input_dtypes = [self._get_dtype(input) for input in inputs]
         if not input_dtypes:
             return None
+
         def _get_big_dtype(dtype1, dtype2):
             if dtype1 == dtype2:
                 return dtype1
