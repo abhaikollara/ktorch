@@ -121,7 +121,7 @@ def cast(x, dtype):
     while dtype[-1] in digs:
         dtype = dtype[:-1]
     y = get_op(lambda x: getattr(x, dtype)())(x)
-
+    return y
 
 # UPDATES OPS
 
