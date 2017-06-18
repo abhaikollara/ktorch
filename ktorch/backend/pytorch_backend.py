@@ -3,6 +3,24 @@ import torch
 import keras
 from ..graph import *
 
+def _is_num(x):
+    try:
+        float(x)
+        return True
+    except:
+        return False
+
+
+def _get_shape(x):
+    if hasattr(x, 'shape'):
+        return x.shape
+    if hasattr(x, 'size'):
+        return tuple(x.size())
+    if hasattr(x, 'value'):
+        return x.value.size()
+    if _is_num(x):
+        return ()
+    return None
 
 
 def variable(value, dtype=None, name=None):
@@ -159,7 +177,7 @@ def dot(x, y):
             raise Exception('Unsupported tensor ranks for dot operation : ' + str(x_ndim) + ' and ' + str(y_ndim) +'.')
 
     def _compute_output_shape(X):
-        x, y = X[0].shape, X[1].shape
+        x, y = _get_shape(X[0]), _get_shape(X[1])
         x_ndim = len(x)
         y_ndim = len(y)
         if x_ndim == 2 and y_ndim == 2:
