@@ -223,3 +223,14 @@ def batch_dot(x, y, axes=None):
             if axes[1] == 2:
                 x = torch.transpose(x, 1, 2)
             # -------TODO--------------#
+
+
+def transpose(x):
+    def _transpose(x):
+        dim_order = list(reversed(range(ndim(x))))
+        return torch.Tensor.permute(x, *dim_order)
+
+    def _compute_output_shape(X):
+        return tuple(reversed(_get_shape(X)))
+
+    return get_op(_transpose, output_shape=_compute_output_shape)(x)
