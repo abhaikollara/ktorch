@@ -163,7 +163,7 @@ class Op(object):
 def get_op(func, output_shape=None, output_dtype=None, num_inputs=None):
     op = Op()
     if output_shape:
-        op.compute_output_dtype = output_shape
+        op.compute_output_shape = output_shape
     if output_dtype:
         op.compute_output_dtype = output_dtype
     op.num_inputs = num_inputs
