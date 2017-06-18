@@ -73,7 +73,7 @@ def int_shape(x):
 
 
 def ndim(x):
-    x_shape = int_shape(x)
+    x_shape = _get_shape(x)
     if x_shape is None:
         return None
     else:
