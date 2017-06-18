@@ -1,4 +1,4 @@
-from op import Op
+from .op import Op
 py_slice = slice
 
 class Add(Op):
