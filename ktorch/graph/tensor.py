@@ -1,3 +1,4 @@
+import inspect
 
 tensors = {}
 
@@ -34,14 +35,32 @@ class Tensor(object):
                 inputs = [evaluate(x) for x in self.inputs]
             else:
                 inputs = self.inputs.eval()
+            shape_argspec = inspect.getargspec(self.op.compute_output_shape)
+            dtype_argspec = inspect.getargspec(self.op.compute_output_dtype)
             if type(self.op.arguments) is dict:
                 self.set_value(self.op.call(inputs, **op.arguments))
+                if len(shape_argspec.args) > 2 or shape_argspec.keywords is not None:
+                    self.shape = self.op.compute_output_shape(inputs, **op.arguments)
+                else:
+                    self.shape = self.op.compute_output_shape(inputs)
+                if len(dtype_argspec.args) > 2 or dtype_argspec.keywords is not None:
+                    self.dtype = self.op.compute_output_dtype(inputs, **op.arguments)
+                else:
+                    self.dtype = self.op.compute_output_dtype(inputs)
             elif type(self.op.arguments) is list:
                 self.set_value(self.op.call(inputs, *arguments))
+                if len(shape_argspec.args) > 2 or shape_argspec.varargs is not None:
+                    self.shape = self.op.compute_output_shape(inputs, *op.arguments)
+                else:
+                    self.shape = self.op.compute_output_shape(inputs)
+                if len(dtype_argspec.args) > 2 or dtype_argspec.varargs is not None:
+                    self.dtype = self.op.compute_output_dtype(inputs, *op.arguments)
+                else:
+                    self.dtype = self.op.compute_output_dtype(inputs)
             else:
                 self.set_value(self.op.call(inputs))
-            self.shape = self.op.compute_output_shape(inputs)
-            self.dtype = self.op.compute_output_dtype(inputs)
+                self.shape = self.op.compute_output_shape(inputs)
+                self.dtype = self.op.compute_output_dtype(inputs)
         return self.value
 
     def set_value(self, value):
