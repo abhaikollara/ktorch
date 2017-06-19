@@ -353,6 +353,29 @@ def std(x, axis=None, keepdims=False):
     return get_op(_std, output_shape=_compute_output_shape)([x, axis, keepdims])
 
 
+def var(x, axis=None, keepdims=False):
+    def _var(inputs):
+        x, axis, keepdims = inputs
+        y = torch.var(x, axis)
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(inputs):
+        x, axis, keepdims = inputs
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_var, output_shape=_compute_output_shape)([x, axis, keepdims])
+
+
 def cumsum(x, axis=0):
     def _cumsum(inputs):
         x, axis = inputs
