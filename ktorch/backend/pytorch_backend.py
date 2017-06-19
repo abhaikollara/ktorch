@@ -234,3 +234,25 @@ def transpose(x):
         return tuple(reversed(_get_shape(X)))
 
     return get_op(_transpose, output_shape=_compute_output_shape)(x)
+
+
+# ELEMENT-WISE OPERATION
+
+def max(x, axis=None, keepdims=False):
+    def _max(inputs):
+        x, axis, keepdims = inputs
+        y = torch.max(x, axis)[0]
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(inputs):
+        x, axis, keepdims = inputs
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_max, output_shape=_compute_output_shape)([x, axis, keepdims])
