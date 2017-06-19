@@ -334,10 +334,22 @@ def cumsum(x, axis=0):
     def _cumsum(inputs):
         x, axis = inputs
         y = torch.cumsum(x, axis)
-        # Since keepdims argument of torch not functional
         return y
 
     def _compute_output_shape(inputs):
         return _get_shape(inputs[0])
 
     return get_op(_cumsum, output_shape=_compute_output_shape)([x, axis])
+
+#~~~~~~~~~~~~~~ UNIMPLEMENTED IN PYTORCH !! ~~~~~~~~~~~~~~#
+
+def cumprod(x, axis=0):
+    def _cumprod(inputs):
+        x, axis = inputs
+        y = torch.cumprod(x, axis)
+        return y
+
+    def _compute_output_shape(inputs):
+        return _get_shape(inputs[0])
+
+    return get_op(_cumprod, output_shape=_compute_output_shape)([x, axis])
