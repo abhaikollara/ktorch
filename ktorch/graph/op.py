@@ -17,9 +17,10 @@ def _is_num(x):
 
 class Op(object):
 
-    def __init__(self):
+    def __init__(self, arguments={}):
         if not hasattr(self, 'num_inputs'):
             self.num_inputs = None
+        self.arguments = arguments
 
     def call(self, x):
         # imperative code goes here
@@ -156,8 +157,8 @@ class Op(object):
         return tuple(output_shape)
 
 
-def get_op(func, output_shape=None, output_dtype=None, num_inputs=None):
-    op = Op()
+def get_op(func, output_shape=None, output_dtype=None, num_inputs=None, arguments={}):
+    op = Op(arguments=arguments)
     if output_shape:
         op.compute_output_dtype = output_shape
     if output_dtype:
