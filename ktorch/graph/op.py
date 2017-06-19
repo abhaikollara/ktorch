@@ -1,7 +1,7 @@
 from .tensor import Tensor
 from .node import Node
 import numpy as np
-
+import inspect
 
 def _to_list(x):
     if type(x) is not list:
@@ -49,8 +49,29 @@ class Op(object):
         y = Tensor()
         y.op = self
         y.inputs = x
-        y.shape = self.compute_output_shape(x)
-        y.dtype = self.compute_output_dtype(x)
+        shape_argspec = inspect.getargspec(self.compute_output_shape)
+        dtype_argspec = inspect.getargspec(self.compute_output_dtype)
+        if type(self.arguments) is dict:
+            if len(shape_argspec.args) > 2 or shape_argspec.keywords is not None:
+                y.shape = self.compute_output_shape(x, **self.arguments)
+            else:
+                y.shape = self.compute_output_shape(x)
+            if len(dtype_argspec.args) > 2 or dtype_argspec.keywords is not None:
+                y.dtype = self.compute_output_dtype(x, **self.arguments)
+            else:
+                y.dtype = self.compute_output_dtype(x)
+        elif type(self.arguments) is list:
+            if len(shape_argspec.args) > 2 or shape_argspec.varargs is not None:
+                y.shape = self.compute_output_shape(x, *self.arguments)
+            else:
+                y.shape = self.compute_output_shape(x)
+            if len(dtype_argspec.args) > 2 or dtype_argspec.varargs is not None:
+                y.dtype = self.compute_output_dtype(x, *self.op.arguments)
+            else:
+                self.dtype = self.compute_output_dtype(x)
+        else:
+            self.shape = self.compute_output_shape(x)
+            self.dtype = self.compute_output_dtype(x)
         Node(x, y)
         return y
 

@@ -38,23 +38,23 @@ class Tensor(object):
             shape_argspec = inspect.getargspec(self.op.compute_output_shape)
             dtype_argspec = inspect.getargspec(self.op.compute_output_dtype)
             if type(self.op.arguments) is dict:
-                self.set_value(self.op.call(inputs, **op.arguments))
+                self.set_value(self.op.call(inputs, **self.op.arguments))
                 if len(shape_argspec.args) > 2 or shape_argspec.keywords is not None:
-                    self.shape = self.op.compute_output_shape(inputs, **op.arguments)
+                    self.shape = self.op.compute_output_shape(inputs, **self.op.arguments)
                 else:
                     self.shape = self.op.compute_output_shape(inputs)
                 if len(dtype_argspec.args) > 2 or dtype_argspec.keywords is not None:
-                    self.dtype = self.op.compute_output_dtype(inputs, **op.arguments)
+                    self.dtype = self.op.compute_output_dtype(inputs, **self.op.arguments)
                 else:
                     self.dtype = self.op.compute_output_dtype(inputs)
             elif type(self.op.arguments) is list:
-                self.set_value(self.op.call(inputs, *arguments))
+                self.set_value(self.op.call(inputs, *self.op.arguments))
                 if len(shape_argspec.args) > 2 or shape_argspec.varargs is not None:
-                    self.shape = self.op.compute_output_shape(inputs, *op.arguments)
+                    self.shape = self.op.compute_output_shape(inputs, *self.op.arguments)
                 else:
                     self.shape = self.op.compute_output_shape(inputs)
                 if len(dtype_argspec.args) > 2 or dtype_argspec.varargs is not None:
-                    self.dtype = self.op.compute_output_dtype(inputs, *op.arguments)
+                    self.dtype = self.op.compute_output_dtype(inputs, *self.op.arguments)
                 else:
                     self.dtype = self.op.compute_output_dtype(inputs)
             else:

@@ -239,14 +239,12 @@ def transpose(x):
 # ELEMENT-WISE OPERATION
 
 def max(x, axis=None, keepdims=False):
-    def _max(inputs):
-        x, axis, keepdims = inputs
+    def _max(x, axis, keepdims):
         y = torch.max(x, axis)[0]
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -258,18 +256,16 @@ def max(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_max, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_max, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def min(x, axis=None, keepdims=False):
-    def _min(inputs):
-        x, axis, keepdims = inputs
+    def _min(x, axis, keepdims):
         y = torch.min(x, axis)[0]
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -281,18 +277,16 @@ def min(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_min, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_min, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def sum(x, axis=None, keepdims=False):
-    def _sum(inputs):
-        x, axis, keepdims = inputs
+    def _sum(x, axis, keepdims):
         y = torch.sum(x, axis)
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -304,18 +298,16 @@ def sum(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_sum, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_sum, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def prod(x, axis=None, keepdims=False):
-    def _prod(inputs):
-        x, axis, keepdims = inputs
+    def _prod(x, axis, keepdims):
         y = torch.prod(x, axis)
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -327,18 +319,16 @@ def prod(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_prod, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_prod, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def std(x, axis=None, keepdims=False):
-    def _std(inputs):
-        x, axis, keepdims = inputs
+    def _std(x, axis, keepdims):
         y = torch.std(x, axis)
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -350,18 +340,16 @@ def std(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_std, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_std, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def var(x, axis=None, keepdims=False):
-    def _var(inputs):
-        x, axis, keepdims = inputs
+    def _var(x, axis, keepdims):
         y = torch.var(x, axis)
         # Since keepdims argument of torch not functional
         return y if keepdims else torch.squeeze(y, axis)
 
-    def _compute_output_shape(inputs):
-        x, axis, keepdims = inputs
+    def _compute_output_shape(x, axis, keepdims):
         if axis is None:
             return ()
 
@@ -373,19 +361,18 @@ def var(x, axis=None, keepdims=False):
 
         return tuple(shape)
 
-    return get_op(_var, output_shape=_compute_output_shape)([x, axis, keepdims])
+    return get_op(_var, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
 
 
 def cumsum(x, axis=0):
-    def _cumsum(inputs):
-        x, axis = inputs
+    def _cumsum(x, axis):
         y = torch.cumsum(x, axis)
         return y
 
-    def _compute_output_shape(inputs):
-        return _get_shape(inputs[0])
+    def _compute_output_shape(x, axis):
+        return _get_shape(x)
 
-    return get_op(_cumsum, output_shape=_compute_output_shape)([x, axis])
+    return get_op(_cumsum, output_shape=_compute_output_shape, arguments=[axis])(x)
 
 #~~~~~~~~~~~~~~ UNIMPLEMENTED IN PYTORCH !! ~~~~~~~~~~~~~~#
 
