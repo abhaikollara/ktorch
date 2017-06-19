@@ -330,6 +330,29 @@ def prod(x, axis=None, keepdims=False):
     return get_op(_prod, output_shape=_compute_output_shape)([x, axis, keepdims])
 
 
+def std(x, axis=None, keepdims=False):
+    def _std(inputs):
+        x, axis, keepdims = inputs
+        y = torch.std(x, axis)
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(inputs):
+        x, axis, keepdims = inputs
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_std, output_shape=_compute_output_shape)([x, axis, keepdims])
+
+
 def cumsum(x, axis=0):
     def _cumsum(inputs):
         x, axis = inputs
