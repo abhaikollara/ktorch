@@ -328,3 +328,16 @@ def prod(x, axis=None, keepdims=False):
         return tuple(shape)
 
     return get_op(_prod, output_shape=_compute_output_shape)([x, axis, keepdims])
+
+
+def cumsum(x, axis=0):
+    def _cumsum(inputs):
+        x, axis = inputs
+        y = torch.cumsum(x, axis)
+        # Since keepdims argument of torch not functional
+        return y
+
+    def _compute_output_shape(inputs):
+        return _get_shape(inputs[0])
+
+    return get_op(_cumsum, output_shape=_compute_output_shape)([x, axis])
