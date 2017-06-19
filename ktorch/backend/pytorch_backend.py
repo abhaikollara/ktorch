@@ -247,7 +247,7 @@ def max(x, axis=None, keepdims=False):
 
     def _compute_output_shape(inputs):
         x, axis, keepdims = inputs
-        if not axis:
+        if axis is None:
             return ()
 
         shape = list(_get_shape(x))
@@ -270,7 +270,7 @@ def min(x, axis=None, keepdims=False):
 
     def _compute_output_shape(inputs):
         x, axis, keepdims = inputs
-        if not axis:
+        if axis is None:
             return ()
 
         shape = list(_get_shape(x))
@@ -293,7 +293,7 @@ def sum(x, axis=None, keepdims=False):
 
     def _compute_output_shape(inputs):
         x, axis, keepdims = inputs
-        if not axis:
+        if axis is None:
             return ()
 
         shape = list(_get_shape(x))
