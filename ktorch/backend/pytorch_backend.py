@@ -256,3 +256,23 @@ def max(x, axis=None, keepdims=False):
         return tuple(shape)
 
     return get_op(_max, output_shape=_compute_output_shape)([x, axis, keepdims])
+
+
+def min(x, axis=None, keepdims=False):
+    def _min(inputs):
+        x, axis, keepdims = inputs
+        y = torch.min(x, axis)[0]
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(inputs):
+        x, axis, keepdims = inputs
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_min, output_shape=_compute_output_shape)([x, axis, keepdims])
