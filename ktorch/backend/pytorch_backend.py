@@ -377,12 +377,11 @@ def cumsum(x, axis=0):
 #~~~~~~~~~~~~~~ UNIMPLEMENTED IN PYTORCH !! ~~~~~~~~~~~~~~#
 
 def cumprod(x, axis=0):
-    def _cumprod(inputs):
-        x, axis = inputs
+    def _cumprod(x, axis):
         y = torch.cumprod(x, axis)
         return y
 
-    def _compute_output_shape(inputs):
-        return _get_shape(inputs[0])
+    def _compute_output_shape(x, axis):
+        return _get_shape(x)
 
-    return get_op(_cumprod, output_shape=_compute_output_shape)([x, axis])
+    return get_op(_cumprod, output_shape=_compute_output_shape, arguments=[axis])(x)
