@@ -3,6 +3,7 @@ import torch
 import keras
 from ..graph import *
 
+
 def _is_num(x):
     try:
         float(x)
@@ -12,12 +13,12 @@ def _is_num(x):
 
 
 def _get_shape(x):
+    if hasattr(x, 'value'):
+        return x.value.size()
     if hasattr(x, 'shape'):
         return x.shape
     if hasattr(x, 'size'):
         return tuple(x.size())
-    if hasattr(x, 'value'):
-        return x.value.size()
     if _is_num(x):
         return ()
     return None
@@ -69,7 +70,7 @@ def int_shape(x):
     elif hasattr(x, 'shape'):
         return x.shape
     else:
-        raise Exception('Tensor shape not available.')  
+        raise Exception('Tensor shape not available.')
 
 
 def ndim(x):
@@ -86,6 +87,7 @@ def dtype(x):
 
 def eval(x):
     return x.eval().numpy()
+
 
 def zeros(shape, dtype=None, name=None):
     if dtype is None:
@@ -119,6 +121,7 @@ def identity(x):
     y = get_op(lambda x: x + 0.)(x)
     return y
 
+
 def count_params(x):
     return np.prod(x.eval().size())
 
@@ -131,7 +134,6 @@ def random_uniform_variable(shape, low, high, dtype=None, name=None):
 def random_normal_variable(shape, mean, scale, dtype=None, name=None):
     return variable(np.random.normal(loc=0.0, scale=scale, size=shape),
                     dtype=dtype, name=name)
-
 
 
 def cast(x, dtype):
@@ -174,7 +176,7 @@ def dot(x, y):
         if x_ndim == 1 and y_ndim == 1:
             return torch.dot(x, y)
         else:
-            raise Exception('Unsupported tensor ranks for dot operation : ' + str(x_ndim) + ' and ' + str(y_ndim) +'.')
+            raise Exception('Unsupported tensor ranks for dot operation : ' + str(x_ndim) + ' and ' + str(y_ndim) + '.')
 
     def _compute_output_shape(X):
         x, y = _get_shape(X[0]), _get_shape(X[1])
@@ -188,7 +190,7 @@ def dot(x, y):
             return (y[0],)
         if x_ndim == 1 and y_ndim == 1:
             return (0,)
-       
+
     return get_op(_dot, output_shape=_compute_output_shape)([x, y])
 
 
@@ -213,7 +215,7 @@ def batch_dot(x, y, axes=None):
                 for i in range(diff):
                     y = torch.unsqueeze(y, y_ndim + i)
             else:
-                y_diff = 0  
+                y_diff = 0
             if axes[0] == 1:
                 x = torch.transpose(x, 1, 2)
             elif axes[0] == 2:
@@ -376,6 +378,7 @@ def cumsum(x, axis=0):
 
 #~~~~~~~~~~~~~~ UNIMPLEMENTED IN PYTORCH !! ~~~~~~~~~~~~~~#
 
+
 def cumprod(x, axis=0):
     def _cumprod(x, axis=axis):
         y = torch.cumprod(x, axis)
@@ -387,6 +390,7 @@ def cumprod(x, axis=0):
     return get_op(_cumprod, output_shape=_compute_output_shape, arguments=[axis])(x)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 
 def mean(x, axis=None, keepdims=False):
     def _mean(x, axis=axis, keepdims=keepdims):
@@ -407,3 +411,45 @@ def mean(x, axis=None, keepdims=False):
         return tuple(shape)
 
     return get_op(_mean, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
+
+
+def any(x, axis=None, keepdims=False):
+    def _any(x, axis=axis, keepdims=keepdims):
+        y = torch.sum(x != 0, axis) != 0
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis, keepdims=keepdims):
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_any, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
+
+
+def all(x, axis=None, keepdims=False):
+    def _all(x, axis=axis, keepdims=keepdims):
+        y = torch.sum(x == False, axis) == 0
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis, keepdims=keepdims):
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_all, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
