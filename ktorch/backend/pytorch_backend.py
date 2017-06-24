@@ -538,3 +538,10 @@ def round(x):
 def sign(x):
     y = get_op(lambda x: torch.sign(x))(x)
     return y
+
+
+def pow(x, exp):
+    def _pow(x, exp=exp):
+        return torch.pow(x, exp)
+
+    return get_op(_pow, arguments=[exp])(x)
