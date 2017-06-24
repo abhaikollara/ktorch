@@ -389,4 +389,21 @@ def cumprod(x, axis=0):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 def mean(x, axis=None, keepdims=False):
-    pass
+    def _mean(x, axis=axis, keepdims=keepdims):
+        y = torch.mean(x, axis)
+        # Since keepdims argument of torch not functional
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis, keepdims=keepdims):
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_mean, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
