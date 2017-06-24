@@ -365,11 +365,11 @@ def var(x, axis=None, keepdims=False):
 
 
 def cumsum(x, axis=0):
-    def _cumsum(x, axis):
+    def _cumsum(x, axis=axis):
         y = torch.cumsum(x, axis)
         return y
 
-    def _compute_output_shape(x, axis):
+    def _compute_output_shape(x, axis=axis):
         return _get_shape(x)
 
     return get_op(_cumsum, output_shape=_compute_output_shape, arguments=[axis])(x)
@@ -377,11 +377,16 @@ def cumsum(x, axis=0):
 #~~~~~~~~~~~~~~ UNIMPLEMENTED IN PYTORCH !! ~~~~~~~~~~~~~~#
 
 def cumprod(x, axis=0):
-    def _cumprod(x, axis):
+    def _cumprod(x, axis=axis):
         y = torch.cumprod(x, axis)
         return y
 
-    def _compute_output_shape(x, axis):
+    def _compute_output_shape(x, axis=axis):
         return _get_shape(x)
 
     return get_op(_cumprod, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+def mean(x, axis=None, keepdims=False):
+    pass
