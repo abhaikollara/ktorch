@@ -528,3 +528,13 @@ def logsumexp(x, axis=None, keepdims=False):
         return tuple(shape)
 
     return get_op(_logsumexp, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
+
+
+def round(x):
+    y = get_op(lambda x: torch.round(x))(x)
+    return y
+
+
+def sign(x):
+    y = get_op(lambda x: torch.sign(x))(x)
+    return y
