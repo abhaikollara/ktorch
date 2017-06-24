@@ -483,3 +483,28 @@ def argmin(x, axis=-1):
         return tuple(shape)
 
     return get_op(_argmin, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+
+def square(x):
+    y = get_op(lambda x: x * x)(x)
+    return y
+
+
+def abs(x):
+    y = get_op(lambda x: torch.abs(x))(x)
+    return y
+
+
+def sqrt(x):
+    y = get_op(lambda x: torch.sqrt(x))(x)
+    return y
+
+
+def exp(x):
+    y = get_op(lambda x: torch.exp(x))(x)
+    return y
+
+
+def log(x):
+    y = get_op(lambda x: torch.log(x))(x)
+    return y
