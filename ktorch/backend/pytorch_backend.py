@@ -508,3 +508,23 @@ def exp(x):
 def log(x):
     y = get_op(lambda x: torch.log(x))(x)
     return y
+
+
+def logsumexp(x, axis=None, keepdims=False):
+    def _logsumexp(x, axis=axis, keepdims=keepdims):
+        y = torch.log(torch.sum(torch.exp(x), axis))
+        return y if keepdims else torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis, keepdims=keepdims):
+        if axis is None:
+            return ()
+
+        shape = list(_get_shape(x))
+        if keepdims:
+            shape[axis] = 1
+        else:
+            del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_logsumexp, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
