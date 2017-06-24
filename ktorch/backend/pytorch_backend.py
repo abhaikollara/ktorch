@@ -453,3 +453,33 @@ def all(x, axis=None, keepdims=False):
         return tuple(shape)
 
     return get_op(_all, output_shape=_compute_output_shape, arguments=[axis, keepdims])(x)
+
+
+def argmax(x, axis=-1):
+    def _argmax(x, axis=axis):
+        y = torch.max(x, axis)[1]
+        # Since keepdims argument of torch not functional
+        return torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis):
+        shape = list(_get_shape(x))
+        del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_argmax, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+
+def argmin(x, axis=-1):
+    def _argmin(x, axis=axis):
+        y = torch.max(x, axis)[1]
+        # Since keepdims argument of torch not functional
+        return torch.squeeze(y, axis)
+
+    def _compute_output_shape(x, axis=axis):
+        shape = list(_get_shape(x))
+        del shape[axis]
+
+        return tuple(shape)
+
+    return get_op(_argmin, output_shape=_compute_output_shape, arguments=[axis])(x)
