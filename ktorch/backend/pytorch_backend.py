@@ -545,3 +545,15 @@ def pow(x, exp):
         return torch.pow(x, exp)
 
     return get_op(_pow, arguments=[exp])(x)
+
+
+def clip(x, min_value, max_value):
+    def _clip(x, min_value=min_value, max_value=max_value):
+        if max_value is not None and max_value < min_value:
+            max_value = min_value
+        if max_value is None:
+            max_value = np.inf
+
+        return torch.clamp(x, min_value, max_value)
+
+    return get_op(_clip, arguments=[min_value, max_value])(x)
