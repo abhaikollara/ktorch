@@ -615,3 +615,15 @@ def reshape(x, shape):
             return tuple(s)
 
     return get_op(_reshape, output_shape=_compute_output_shape, arguments=shape)(x)
+
+
+def permute_dimensions(x, pattern):
+    def _permute_dimensions(x, pattern=pattern):
+        return x.permute(*pattern)
+
+    def _compute_output_shape(x, pattern=pattern):
+        print(x)
+        print(pattern)
+        return tuple(np.asarray(_get_shape(x))[list(pattern)])
+
+    return get_op(_permute_dimensions, output_shape=_compute_output_shape, arguments=[pattern])(x)
