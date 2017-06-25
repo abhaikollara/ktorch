@@ -581,3 +581,18 @@ def sin(x):
 def cos(x):
     y = get_op(lambda x: torch.cos(x))(x)
     return y
+
+
+# SHAPE OPERATIONS
+
+def concatenate(tensors, axis=-1):
+    def _concatenate(tensors, axis=axis):
+        return torch.cat(tensors, axis)
+
+    def _compute_output_shape(tensors, axis=axis):
+        new_axis = np.sum([_get_shape(tensor)[axis] for tensor in tensors])
+        shape = list(_get_shape(tensors[0]))
+        shape[axis] = new_axis
+        return tuple(shape)
+
+    return get_op(_concatenate, output_shape=_compute_output_shape, arguments=[axis])(tensors)
