@@ -559,6 +559,20 @@ def clip(x, min_value, max_value):
     return get_op(_clip, arguments=[min_value, max_value])(x)
 
 
+def maximum(x, y):
+    def _maximum(inputs):
+        return torch.max(inputs[0], inputs[1])
+
+    return get_op(_maximum)([x, y])
+
+
+def minimum(x, y):
+    def _maximum(inputs):
+        return torch.min(inputs[0], inputs[1])
+
+    return get_op(_maximum)([x, y])
+
+
 def sin(x):
     y = get_op(lambda x: torch.sin(x))(x)
     return y
