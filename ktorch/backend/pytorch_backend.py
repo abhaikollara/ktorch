@@ -622,8 +622,16 @@ def permute_dimensions(x, pattern):
         return x.permute(*pattern)
 
     def _compute_output_shape(x, pattern=pattern):
-        print(x)
-        print(pattern)
         return tuple(np.asarray(_get_shape(x))[list(pattern)])
 
     return get_op(_permute_dimensions, output_shape=_compute_output_shape, arguments=[pattern])(x)
+
+
+def flatten(x):
+    def _flatten(x):
+        return x.view([-1])
+
+    def _compute_output_shape(x):
+        return (np.prod(list(_get_shape(x))),)
+
+    return get_op(_flatten, output_shape=_compute_output_shape)(x)
