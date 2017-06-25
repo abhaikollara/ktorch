@@ -635,3 +635,27 @@ def flatten(x):
         return (np.prod(list(_get_shape(x))),)
 
     return get_op(_flatten, output_shape=_compute_output_shape)(x)
+
+
+def expand_dims(x, axis=-1):
+    def _expand_dims(x, axis=axis):
+        return torch.unsqueeze(x, axis)
+
+    def _compute_output_shape(x, axis=axis):
+        shape = list(_get_shape(x))
+        shape.insert(axis, 1)
+        return shape
+
+    return get_op(_expand_dims, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+
+def squeeze(x, axis):
+    def _squeeze(x, axis=axis):
+        return torch.squeeze(x, axis)
+
+    def _compute_output_shape(x, axis=axis):
+        shape = list(_get_shape(x))
+        del shape[axis]
+        return shape
+
+    return get_op(_squeeze, output_shape=_compute_output_shape, arguments=[axis])(x)
