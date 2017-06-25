@@ -557,3 +557,13 @@ def clip(x, min_value, max_value):
         return torch.clamp(x, min_value, max_value)
 
     return get_op(_clip, arguments=[min_value, max_value])(x)
+
+
+def sin(x):
+    y = get_op(lambda x: torch.sin(x))(x)
+    return y
+
+
+def cos(x):
+    y = get_op(lambda x: torch.cos(x))(x)
+    return y
