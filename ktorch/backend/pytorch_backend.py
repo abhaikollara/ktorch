@@ -659,3 +659,16 @@ def squeeze(x, axis):
         return shape
 
     return get_op(_squeeze, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+
+def stack(x, axis=0):
+    def _stack(x, axis=axis):
+        return torch.stack(x, axis)
+
+    def _compute_output_shape(x, axis=axis):
+        n = len(x)
+        shape = list(_get_shape(x[0]))
+        shape.insert(axis, n)
+        return shape
+
+    return get_op(_stack, output_shape=_compute_output_shape, arguments=[axis])(x)
