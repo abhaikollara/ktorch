@@ -672,3 +672,13 @@ def stack(x, axis=0):
         return shape
 
     return get_op(_stack, output_shape=_compute_output_shape, arguments=[axis])(x)
+
+
+# VALUE MANIPULATION
+
+def get_value(x):
+    return x.eval().data.numpy()
+
+
+def batch_get_value(ops):
+    return [x.eval().data.numpy for x in ops]
