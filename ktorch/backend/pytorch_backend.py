@@ -696,3 +696,11 @@ def batch_set_value(tuples):
 
 def get_variable_shape(x):
     return tuple(x.value.size())
+
+
+def print_tensor(x, message=''):
+    def _print_tensor(x, message=message):
+        print(message, x.value.data)
+
+    return get_op(_print_tensor, arguments=[message])(x)
+
