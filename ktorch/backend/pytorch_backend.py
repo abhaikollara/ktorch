@@ -682,3 +682,13 @@ def get_value(x):
 
 def batch_get_value(ops):
     return [x.eval().data.numpy for x in ops]
+
+
+def set_value(x, value):
+    value = np.asarray(value)
+    x.value.data = torch.from_numpy(value)
+
+
+def batch_set_value(tuples):
+    for x, value in tuples:
+        set_value(x, value)
