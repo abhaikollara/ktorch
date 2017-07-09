@@ -692,3 +692,7 @@ def set_value(x, value):
 def batch_set_value(tuples):
     for x, value in tuples:
         set_value(x, value)
+
+
+def get_variable_shape(x):
+    return tuple(x.value.size())
