@@ -723,3 +723,10 @@ def relu(x, alpha=0., max_value=None):
         return x
 
     return get_op(_relu, arguments=[alpha, max_value])(x)
+
+
+def elu(x, alpha=1.):
+    def _elu(x, alpha=alpha):
+        return F.elu(x)
+
+    return get_op(_elu, arguments=[alpha])(x)
