@@ -773,3 +773,12 @@ def tanh(x):
         return F.tanh(x)
 
     return get_op(_tanh)(x)
+
+
+def dropout(x, level, noise_shape=None, seed=None):
+    # No support for noise shape and seed as of now
+    def _dropout(x, level=level):
+        return F.dropout(x, p=level, training=True)
+
+    return get_op(_dropout)(x)
+
