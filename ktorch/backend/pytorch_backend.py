@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import torch.nn.functional as F
 import keras
 from ..graph import *
 
@@ -704,3 +705,21 @@ def print_tensor(x, message=''):
 
     return get_op(_print_tensor, arguments=[message])(x)
 
+
+## NN OPERATIONS
+
+def relu(x, alpha=0., max_value=None):
+    def _relu(x, alpha=0., max_value=max_value):
+        if alpha != 0.:
+            negative_part = F.relu(-x)
+        x = F.relu(x)
+
+        if max_value is not None:
+            print ("Meh")
+            x = torch.clamp(x, max=max_value)
+
+        if alpha != 0:
+            x -= alpha * negative_part
+        return x
+
+    return get_op(_relu, arguments=[alpha, max_value])(x)
