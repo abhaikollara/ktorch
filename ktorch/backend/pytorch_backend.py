@@ -751,3 +751,25 @@ def softsign(x):
         return F.softsign(x)
 
     return get_op(_softsign)(x)
+
+
+def sigmoid(x):
+    def _sigmoid(x):
+        return F.sigmoid(x)
+
+    return get_op(_sigmoid)(x)
+
+
+def hard_sigmoid(x):
+    def _hard_sigmoid(x):
+        x = (0.2 * x) + 0.5
+        return torch.clamp(x, 0., 1.)
+
+    return get_op(_hard_sigmoid)(x)
+
+
+def tanh(x):
+    def _tanh(x):
+        return F.tanh(x)
+
+    return get_op(_tanh)(x)
