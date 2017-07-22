@@ -730,3 +730,24 @@ def elu(x, alpha=1.):
         return F.elu(x)
 
     return get_op(_elu, arguments=[alpha])(x)
+
+
+def softmax(x):
+    def _softmax(x):
+        return F.softmax(x)
+
+    return get_op(_softmax)(x)
+
+
+def softplus(x):
+    def _softplus(x):
+        return F.softplus(x)
+
+    return get_op(_softplus)(x)
+
+
+def softsign(x):
+    def _softsign(x):
+        return F.softsign(x)
+
+    return get_op(_softsign)(x)
