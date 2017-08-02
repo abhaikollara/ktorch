@@ -782,3 +782,10 @@ def dropout(x, level, noise_shape=None, seed=None):
 
     return get_op(_dropout)(x)
 
+
+def l2_normalize(x, axis):
+    def _l2_normalize(x, axis):
+        return torch.nn.functional.normalize(x, p=2, dim=axis)
+
+    return get_op(_l2_normalize, arguments=[axis])(x)
+
