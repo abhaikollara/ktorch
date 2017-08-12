@@ -628,6 +628,11 @@ def permute_dimensions(x, pattern):
     return get_op(_permute_dimensions, output_shape=_compute_output_shape, arguments=[pattern])(x)
 
 
+def arange(start, stop=None, step=1, dtype='int32'):
+        #TODO : Other datatypes
+        return torch.arange(start, stop, step).int()
+
+
 def flatten(x):
     def _flatten(x):
         return x.view([-1])
