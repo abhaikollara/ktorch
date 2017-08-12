@@ -793,16 +793,17 @@ def l2_normalize(x, axis):
 def random_normal(shape, mean=0.0, stddev=1.0, dtype=None, seed=None):
     #TODO dtype
     #TODO seed
-    def _random_normal(shape, mean=mean, stddev=stddev, dtype=dtype):
-        return torch.from_numpy(np.random.normal(mean, stddev, shape))
-
-    return get_op(_random_normal, arguments=[mean, stddev, dtype, seed])(x)
+    return torch.from_numpy(np.random.normal(mean, stddev, shape))
 
 
 def random_uniform(shape, minval=0.0, maxval=1.0, dtype=None, seed=None):
     #TODO dtype
     #TODO seed
-    def _random_uniform(shape, minval=minval, maxval=maxval, dtype=dtype):
-        return torch.from_numpy(np.random.uniform(mean, stddev, shape))
+    return torch.from_numpy(np.random.uniform(mean, stddev, shape))
 
-    return get_op(_random_uniform, arguments=[mean, stddev, dtype, seed])(x)
+
+def random_binomial(shape, p=0.0, dtype=None, seed=None):
+    #TODO dtype
+    #TODO seed
+    return torch.from_numpy(np.random.binomial(1, p, shape))
+
