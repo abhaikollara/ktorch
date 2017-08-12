@@ -807,3 +807,7 @@ def random_binomial(shape, p=0.0, dtype=None, seed=None):
     #TODO seed
     return torch.from_numpy(np.random.binomial(1, p, shape))
 
+
+def truncated_normal(shape, mean=0.0, stddev=1.0, dtype=None, seed=None):
+    x = random_normal(shape, mean, stddev, dtype, seed)
+    return torch.clamp(x, mean - 2 * stddev, mean + 2 * stddev)
