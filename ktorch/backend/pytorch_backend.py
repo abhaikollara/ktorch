@@ -727,6 +727,17 @@ def stack(x, axis=0):
     return get_op(_stack, output_shape=_compute_output_shape, arguments=[axis])(x)
 
 
+def one_hot(indices, num_classes):
+    # Not differentiable
+    def _one_hot(indices, num_classes=num_classes):
+        temp = indices.view(-1,1).long().data
+        batch_size = temp.size()[0]
+        y = torch.zeros(batch_size, num_classes)
+        return y.scatter_(1, temp, 1)
+
+    return get_op(_one_hot, arguments=[num_classes])(indices)
+
+
 # VALUE MANIPULATION
 
 def get_value(x):
