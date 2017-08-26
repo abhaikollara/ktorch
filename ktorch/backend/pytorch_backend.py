@@ -560,6 +560,53 @@ def clip(x, min_value, max_value):
     return get_op(_clip, arguments=[min_value, max_value])(x)
 
 
+def equal(x, y):
+    def _equal(inputs):
+        x, y = inputs
+        return 1 - torch.clamp((torch.ceil(torch.abs(x - y))), 0, 1)
+
+    return get_op(_equal)([x, y])
+
+
+def not_equal(x, y):
+    def _not_equal(inputs):
+        x, y = inputs
+        return torch.clamp((torch.ceil(torch.abs(x - y))), 0, 1)
+
+    return get_op(_not_equal)([x, y])
+
+
+def greater(x, y):
+    def _greater(inputs):
+        x, y = inputs
+        return torch.ceil(torch.clamp((x - y), 0, 1))
+
+    return get_op(_greater)([x, y])
+
+
+def greater_equal(x, y):
+    def _greater_equal(inputs):
+        x, y = inputs
+        return 1 + torch.clamp(torch.floor(x - y), -1, 0)
+
+    return get_op(_greater_equal)([x, y])
+
+
+def less(x, y):
+    def _less(inputs):
+        x, y = inputs
+        return torch.ceil(torch.clamp(y - x, 0, 1))
+    return get_op(_less)([x, y])
+
+
+def less_equal(x, y):
+    def _less_equal(inputs):
+        x, y = inputs
+        return torch.abs(torch.floor(torch.clamp((x - y), -1, 0)))
+
+    return get_op(_less_equal)([x, y])
+
+
 def maximum(x, y):
     def _maximum(inputs):
         return torch.max(inputs[0], inputs[1])
